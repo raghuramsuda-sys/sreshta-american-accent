@@ -180,7 +180,7 @@ h2{font-size:21px; margin:4px 0 8px;}
     <div class="pinMsg" id="pinMsg">Tap your secret code</div>
     <div class="pinPad" id="pinPad"></div>
     <div style="margin-top:14px;"><button class="ghostBtn" onclick="testSound()">🔊 Test Mia's sound</button><div id="pinSoundStatus" class="sub" style="margin-top:8px; min-height:20px;"></div></div>
-    <p class="footerNote">SAMPLE — Main Door + World 1 Super R (first 3 missions) + Baseline</p>
+    <p class="footerNote">SAMPLE v3 — Main Door + World 1 Super R (first 3 missions) + Baseline<br>One Hear Mia button everywhere: slow, then normal, automatically. <span id="clipCount"></span></p>
   </div>
 </section>
 
@@ -235,7 +235,7 @@ h2{font-size:21px; margin:4px 0 8px;}
 <section class="screen" id="scr-play">
   <button class="ghostBtn" onclick="exitPlay()">← World 1</button>
   <div class="progressDots" id="playDots"></div>
-  <div id="soundStatus" class="sub center" style="min-height:20px;"></div>
+  <div id="soundStatus" class="sub center" style="min-height:28px; font-weight:800; font-size:15px; color:#14294A;"></div>
   <div id="playBody"></div>
 </section>
 
@@ -280,12 +280,13 @@ h2{font-size:21px; margin:4px 0 8px;}
   </div>
   <div class="card">
     <div style="font-weight:800; margin-bottom:4px;">🔊 Sample audio note</div>
-    <p style="margin:4px 0; line-height:1.5;">This sample now uses Mia's own recorded clips (same General American voice on every phone), with your phone's voice only as a backup if a clip cannot play. The full build must pass the audio gate: verified General American clips, slow and normal speed, for every Mia line.</p>
+    <p style="margin:4px 0; line-height:1.5;">v3 sound rule, used everywhere from now on: Mia's own recorded clips (same General American voice on every phone), one Hear Mia button that plays slow then normal automatically, phone voice only as a backup if a clip cannot play, and a visible sound status that never fails silently. No two speed buttons, ever.</p>
   </div>
   <button class="bigBtn gold" onclick="show('home')">Preview Sreshta's Main Door</button>
   <button class="ghostBtn" onclick="show('pin')">← Back to PIN door</button>
 </section>
 
+<audio id="miaAudio" preload="auto" style="display:none"></audio>
 <script>
 /* ============ DATA ============ */
 const WORLDS=[
@@ -357,45 +358,61 @@ function setSoundStatus(msg){
   const a=document.getElementById("soundStatus"); if(a)a.textContent=msg;
   const b=document.getElementById("pinSoundStatus"); if(b)b.textContent=msg;
 }
+function setSoundStatus(msg){
+  const a=document.getElementById("soundStatus"); if(a)a.textContent=msg;
+  const b=document.getElementById("pinSoundStatus"); if(b)b.textContent=msg;
+}
 function fallbackTTS(text,rate){
   try{
-    if(!("speechSynthesis" in window)){setSoundStatus("No sound on this phone. Check volume, or try Chrome."); return;}
+    if(!("speechSynthesis" in window)){setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome."); return;}
     const u=new SpeechSynthesisUtterance(text);
-    u.lang="en-US"; u.rate=rate||0.9;
+    u.lang="en-US"; u.rate=1;
     const vs=speechSynthesis.getVoices();
     const v=vs.find(function(x){return x.lang&&x.lang.toLowerCase().indexOf("en-us")===0;})||vs.find(function(x){return x.lang&&x.lang.toLowerCase().indexOf("en")===0;});
     if(v)u.voice=v;
-    u.onstart=function(){setSoundStatus("🔊 Playing with your phone voice (backup)…");};
-    u.onerror=function(){setSoundStatus("No sound on this phone. Check volume, or try Chrome.");};
+    u.onstart=function(){setSoundStatus("Playing with your phone voice (backup)…");};
+    u.onerror=function(){setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome.");};
     speechSynthesis.cancel(); speechSynthesis.speak(u);
-  }catch(e){setSoundStatus("No sound on this phone. Check volume, or try Chrome.");}
+  }catch(e){setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome.");}
 }
-function playClip(key,rate){
-  try{
-    if(currentAudio){try{currentAudio.pause();}catch(e){}}
-    const src=(typeof AUDIO!=="undefined"&&AUDIO[key])?AUDIO[key]:null;
-    if(!src){const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;}); if(t){fallbackTTS(t,rate); return;}}
-    const a=new Audio(src);
-    currentAudio=a; a.playbackRate=rate||1;
-    a.onplay=function(){setSoundStatus("🔊 Playing Mia…");};
-    a.onended=function(){setSoundStatus("");};
-    a.onerror=function(){
-      const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
-      if(t)fallbackTTS(t,rate); else setSoundStatus("That sound clip could not play. Check volume, or try Chrome.");
-    };
-    const pr=a.play();
-    if(pr&&pr.catch)pr.catch(function(){setSoundStatus("Tap Mia again — sound needs a tap to start on this phone.");});
-  }catch(e){fallbackTTS(key,rate);}
+function playOnce(key,rate,msg,doneCb){
+  const el=document.getElementById("miaAudio");
+  const src=(typeof AUDIO!=="undefined"&&AUDIO[key])?AUDIO[key]:null;
+  if(!el||!src){
+    const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
+    if(t){fallbackTTS(t,1); if(doneCb)doneCb(); return;}
+    setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome."); return;
+  }
+  try{el.pause();}catch(e){}
+  el.src=src; el.volume=1; el.muted=false; el.playbackRate=rate||1;
+  el.onended=function(){if(doneCb)doneCb();};
+  el.onerror=function(){
+    const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
+    if(t)fallbackTTS(t,1); else setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome.");
+    if(doneCb)doneCb();
+  };
+  if(msg)setSoundStatus(msg);
+  const pr=el.play();
+  if(pr&&pr.catch)pr.catch(function(){
+    setSoundStatus("Sound did not play. Tap Hear Mia again, volume up, close and reopen in Chrome.");
+    const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
+    if(t)fallbackTTS(t,1);
+  });
 }
+function playHear(key){
+  playOnce(key,0.75,"Mia, slow…",function(){
+    playOnce(key,1,"Mia, normal…",function(){setSoundStatus("Tap Hear Mia again to hear it once more.");});
+  });
+}
+function playClip(key,rate){playOnce(key,rate||1,"Playing Mia…",function(){setSoundStatus("Tap Hear Mia again to hear it once more.");});}
 function speak(text,rate){
   const key=TEXT2KEY[text];
-  if(key){playClip(key,rate||1); return;}
-  fallbackTTS(text,rate);
+  if(key){playHear(key); return;}
+  fallbackTTS(text,1);
 }
 function testSound(){
-  setSoundStatus("Testing…");
-  playClip("car",1);
-  setTimeout(function(){const s=document.getElementById("pinSoundStatus"); if(s&&!s.textContent)s.textContent="If you heard “car”, Mia's sound works on this phone.";},1200);
+  setSoundStatus("Testing Mia…");
+  playOnce("car",1,"Testing Mia…",function(){setSoundStatus("If you heard car, Mia sound works on this phone.");});
 }
 if("speechSynthesis" in window){try{speechSynthesis.getVoices(); if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=function(){try{speechSynthesis.getVoices();}catch(e){}};}catch(e){}}
 
@@ -521,23 +538,23 @@ function renderPlay(){
   if(play.step===0){
     const L=m.listen;
     body.innerHTML=bubble("Step 1 — Listen Game. Ear first! Tap Mia, listen, then tap what you heard. Only one answer sounds like Mia.")+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(L.say)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(L.say)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(L.say)+'\')">🔊 Hear Mia</button></div>'+
       '<div class="optGrid">'+shuffle(L.options.map(function(o,i){return {o:o,i:i};})).map(function(x){return '<button class="optBtn" id="opt'+x.i+'" onclick="answerListen('+x.i+')">'+x.o.t+'</button>';}).join("")+'</div><div id="listenMsg"></div>';
   } else if(play.step===1){
     body.innerHTML=bubble("Step 2 — Echo Game. Mia says it, you say it straight back, like a parrot. Slow first, then normal.")+
       '<div class="bigDe">'+m.speak+'</div>'+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\')">🔊 Hear Mia</button></div>'+
       '<button class="bigBtn gold" onclick="nextStep()">🎤 I echoed it!</button>';
   } else if(play.step===2){
     body.innerHTML=bubble("Step 3 — Mouth Play. Make the silly face, then the sound, then the word.")+
       '<div class="card" style="font-size:17px; line-height:1.55;">'+m.mouth+'</div>'+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',0.75)">🔊 Hear it again</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\')">🔊 Hear Mia</button></div>'+
       '<button class="bigBtn" onclick="nextStep()">😜 I did the mouth play!</button>';
   } else if(play.step===3){
     body.innerHTML=bubble("Step 4 — Story Line. Say a real line, like you are telling the story yourself.")+
       m.story.map(function(l){return '<div class="storyLine"><div class="de">'+l+'</div></div>';}).join("")+
       '<div class="bigDe">'+m.line+'</div>'+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.line)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(m.line)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.line)+'\')">🔊 Hear Mia</button></div>'+
       '<button class="bigBtn gold" onclick="nextStep()">🎤 I said my story line!</button>';
   } else {
     const first=!S.done[m.id];
@@ -561,7 +578,7 @@ function answerListen(i){
   }else{
     btn.classList.add("wrong");
     document.getElementById("listenMsg").innerHTML=bubble("Not that one — listen once more, you can do it. 💪");
-    speak(L.say,0.75);
+    speak(L.say);
   }
 }
 function renderBaseline(body){
@@ -576,12 +593,12 @@ function renderBaseline(body){
   }
   if(st.kind==="listen"){
     body.innerHTML=bubble(st.q)+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.say)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(st.say)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.say)+'\')">🔊 Hear Mia</button></div>'+
       '<div class="optGrid">'+shuffle(st.options.map(function(o,i){return {o:o,i:i};})).map(function(x){return '<button class="optBtn" id="bopt'+x.i+'" onclick="answerBaseline('+x.i+')">'+x.o.t+'</button>';}).join("")+'</div><div id="bMsg"></div>';
   }else{
     body.innerHTML=bubble(st.q)+
       '<div class="bigDe">'+st.line+'</div>'+
-      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.line)+'\',0.75)">🔊 Mia, slow</button></div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.line)+'\')">🔊 Hear Mia</button></div>'+
       '<button class="bigBtn gold" onclick="play.step++; renderPlay();">🎤 I tried it!</button>';
   }
 }
@@ -589,7 +606,7 @@ function answerBaseline(i){
   const st=BASELINE.steps[play.step], o=st.options[i];
   const btn=document.getElementById("bopt"+i);
   if(o.ok){btn.classList.add("right"); document.getElementById("bMsg").innerHTML=bubble("You heard it! That is how American ears grow. 🌱")+'<button class="bigBtn" onclick="play.step++; renderPlay();">Next</button>';}
-  else{btn.classList.add("wrong"); document.getElementById("bMsg").innerHTML=bubble("Good try — listen again."); speak(st.say,0.75);}
+  else{btn.classList.add("wrong"); document.getElementById("bMsg").innerHTML=bubble("Good try — listen again."); speak(st.say);}
 }
 
 /* ============ RECORD (in-session playback; progress saved, audio not claimed as permanent) ============ */
@@ -628,7 +645,7 @@ function renderSounds(){
   MISSIONS.forEach(function(m){m.words.forEach(function(w){all[w[0]]=w[1];});});
   const met=Object.keys(all).filter(function(w){return S.words[w];});
   if(!met.length){el.innerHTML="<p style='margin:4px 0;'>No sounds yet — finish Mission 1 and your first American sounds will appear here.</p>"; return;}
-  el.innerHTML=met.map(function(w){return '<div class="wordRow"><span><span class="wd">'+w+'</span><br><span class="wm">'+all[w]+'</span></span><span class="pill owned">OWNED</span><button class="hearBtn small" onclick="speak(\''+esc(w)+'\',0.9)">🔊</button></div>';}).join("");
+  el.innerHTML=met.map(function(w){return '<div class="wordRow"><span><span class="wd">'+w+'</span><br><span class="wm">'+all[w]+'</span></span><span class="pill owned">OWNED</span><button class="hearBtn small" onclick="speak(\''+esc(w)+'\')">🔊 Hear Mia</button></div>';}).join("");
 }
 function renderVoice(){
   if(S.voice)document.getElementById("voiceText").textContent="⭐ Saved: your Baseline first sounds and every mission story line you finish. Parents can compare First vs Latest here in the full build.";
@@ -659,6 +676,7 @@ function renderParents(){
     '<p style="margin:4px 0;">Sounds met &amp; owned: <b>'+wordsMet()+'</b></p>'+
     '<p style="margin:4px 0;">Next step: <b>'+(doneN>=3?"Sample complete — full build comes next (Worlds 1–8, 40 missions).":"Continue World 1 with Amma, about 10 minutes, speaking out loud.")+'</b></p>';
 }
+try{const cc=document.getElementById('clipCount'); if(cc)cc.textContent='Clips loaded: '+(typeof AUDIO!=='undefined'?Object.keys(AUDIO).length:0); }catch(e){}
 renderHome();
 </script>
 </body>
