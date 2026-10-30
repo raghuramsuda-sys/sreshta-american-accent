@@ -180,7 +180,7 @@ h2{font-size:21px; margin:4px 0 8px;}
     <div class="pinMsg" id="pinMsg">Tap your secret code</div>
     <div class="pinPad" id="pinPad"></div>
     <div style="margin-top:14px;"><button class="ghostBtn" onclick="testSound()">🔊 Test Mia's sound</button><div id="pinSoundStatus" class="sub" style="margin-top:8px; min-height:20px;"></div></div>
-    <p class="footerNote">SAMPLE v3 — Main Door + World 1 Super R (first 3 missions) + Baseline<br>One Hear Mia button everywhere: slow, then normal, automatically. <span id="clipCount"></span></p>
+    <p class="footerNote">SAMPLE v4 — Main Door + World 1 Super R (first 3 missions) + Baseline<br>One Hear Mia button everywhere: slow, then normal, automatically. First-touch unlock + auto-retry. <span id="clipCount"></span></p>
   </div>
 </section>
 
@@ -280,7 +280,7 @@ h2{font-size:21px; margin:4px 0 8px;}
   </div>
   <div class="card">
     <div style="font-weight:800; margin-bottom:4px;">🔊 Sample audio note</div>
-    <p style="margin:4px 0; line-height:1.5;">v3 sound rule, used everywhere from now on: Mia's own recorded clips (same General American voice on every phone), one Hear Mia button that plays slow then normal automatically, phone voice only as a backup if a clip cannot play, and a visible sound status that never fails silently. No two speed buttons, ever.</p>
+    <p style="margin:4px 0; line-height:1.5;">v4 sound rule, used everywhere from now on: Mia's own recorded clips (same General American voice on every phone), one Hear Mia button that plays slow then normal automatically, phone voice only as a backup if a clip cannot play, a visible sound status that never fails silently, first-touch unlock on any tap, and auto-retry if the first play is blocked. No two speed buttons, ever.</p>
   </div>
   <button class="bigBtn gold" onclick="show('home')">Preview Sreshta's Main Door</button>
   <button class="ghostBtn" onclick="show('pin')">← Back to PIN door</button>
@@ -375,7 +375,23 @@ function fallbackTTS(text,rate){
     speechSynthesis.cancel(); speechSynthesis.speak(u);
   }catch(e){setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome.");}
 }
-function playOnce(key,rate,msg,doneCb){
+let audioUnlocked=false;
+function unlockAudio(){
+  if(audioUnlocked) return; audioUnlocked=true;
+  try{
+    const el=document.getElementById("miaAudio");
+    if(el&&typeof AUDIO!=="undefined"&&AUDIO.car){
+      el.src=AUDIO.car; el.volume=0; el.playbackRate=1;
+      const pr=el.play();
+      if(pr&&pr.then)pr.then(function(){try{el.pause(); el.currentTime=0; el.volume=1;}catch(e){}}).catch(function(){try{el.volume=1;}catch(e){}});
+      else{try{el.pause(); el.volume=1;}catch(e){}}
+    }
+  }catch(e){}
+}
+document.addEventListener("touchstart",unlockAudio,{passive:true});
+document.addEventListener("click",unlockAudio,{passive:true});
+function playOnce(key,rate,msg,doneCb,attempt){
+  attempt=attempt||0;
   const el=document.getElementById("miaAudio");
   const src=(typeof AUDIO!=="undefined"&&AUDIO[key])?AUDIO[key]:null;
   if(!el||!src){
@@ -387,6 +403,7 @@ function playOnce(key,rate,msg,doneCb){
   el.src=src; el.volume=1; el.muted=false; el.playbackRate=rate||1;
   el.onended=function(){if(doneCb)doneCb();};
   el.onerror=function(){
+    if(attempt===0){setSoundStatus("Trying again…"); setTimeout(function(){playOnce(key,rate,msg,doneCb,1);},300); return;}
     const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
     if(t)fallbackTTS(t,1); else setSoundStatus("Sound did not play. Check volume, close and reopen in Chrome.");
     if(doneCb)doneCb();
@@ -394,6 +411,7 @@ function playOnce(key,rate,msg,doneCb){
   if(msg)setSoundStatus(msg);
   const pr=el.play();
   if(pr&&pr.catch)pr.catch(function(){
+    if(attempt===0){setSoundStatus("Trying again…"); setTimeout(function(){playOnce(key,rate,msg,doneCb,1);},300); return;}
     setSoundStatus("Sound did not play. Tap Hear Mia again, volume up, close and reopen in Chrome.");
     const t=Object.keys(TEXT2KEY).find(function(k){return TEXT2KEY[k]===key;});
     if(t)fallbackTTS(t,1);
@@ -667,6 +685,11 @@ function renderBadges(){
     '<div class="frame"><span class="fi">🔒</span>World 5<br>Music</div>'+
     '<div class="frame"><span class="fi">🔒</span>Worlds 6–8<br>Coming later</div>';
 }
+function resetProgress(){
+  if(!confirm("Reset all sample progress on this phone? Baseline, missions, stars and sounds will start again."))return;
+  S={baseline:false,done:{},words:{},voice:false}; save(); renderParents();
+  alert("Progress reset. Reload the page, log in as Sreshta (2017), and test from the start.");
+}
 function renderParents(){
   const doneN=Object.keys(S.done).length;
   document.getElementById("parentOverview").innerHTML=
@@ -674,9 +697,11 @@ function renderParents(){
     '<p style="margin:4px 0;">Baseline: <b>'+(S.baseline?"Done ✅":"Not yet")+'</b></p>'+
     '<p style="margin:4px 0;">Missions finished: <b>'+doneN+' of 3</b> (sample) · Stars: <b>'+totalStars()+'</b></p>'+
     '<p style="margin:4px 0;">Sounds met &amp; owned: <b>'+wordsMet()+'</b></p>'+
-    '<p style="margin:4px 0;">Next step: <b>'+(doneN>=3?"Sample complete — full build comes next (Worlds 1–8, 40 missions).":"Continue World 1 with Amma, about 10 minutes, speaking out loud.")+'</b></p>';
+    '<p style="margin:4px 0;">Next step: <b>'+(doneN>=3?"Sample complete — full build comes next (Worlds 1–8, 40 missions).":"Continue World 1 with Amma, about 10 minutes, speaking out loud.")+'</b></p>'+
+    '<button class="ghostBtn" onclick="resetProgress()" style="margin-top:10px;">Reset sample progress (for testing)</button><p class="sub" style="margin:4px 0;">Parents only. Clears Baseline, missions, stars and sounds on this phone.</p>';
 }
 try{const cc=document.getElementById('clipCount'); if(cc)cc.textContent='Clips loaded: '+(typeof AUDIO!=='undefined'?Object.keys(AUDIO).length:0); }catch(e){}
+try{const el=document.getElementById('miaAudio'); if(el&&typeof AUDIO!=='undefined'&&AUDIO.car){el.src=AUDIO.car; el.load();}}catch(e){}
 renderHome();
 </script>
 </body>
