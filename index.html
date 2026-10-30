@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sreshta's American Accent — Speak Like a US Native</title>
+<style>
+:root{
+  --cream:#FFF8EC; --ink:#21312A; --navy:#1E3A5F; --navy-dark:#14294A;
+  --gold:#E9B44C; --gold-soft:#FBEED3; --red:#D95D4E; --card:#FFFFFF;
+  --muted:#6B7A72; --lock:#C9CFC9; --shadow:0 4px 14px rgba(30,58,95,.12);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Noto Sans",sans-serif;
+  background:var(--cream); color:var(--ink);
+  max-width:480px; margin:0 auto; min-height:100dvh;
+  padding:env(safe-area-inset-top) 16px calc(20px + env(safe-area-inset-bottom));
+}
+button{font-family:inherit; cursor:pointer; border:none;}
+a{color:inherit; text-decoration:none;}
+.screen{display:none;}
+.screen.on{display:block;}
+h1{font-size:26px; margin:6px 0 4px;}
+h2{font-size:21px; margin:4px 0 8px;}
+.sub{color:var(--muted); font-size:15px; margin:0 0 14px; line-height:1.45;}
+.islandBack{
+  display:inline-flex; align-items:center; gap:6px; min-height:44px;
+  background:#fff; color:var(--navy-dark); border:2px solid var(--gold);
+  padding:8px 14px; border-radius:999px; font-size:14px; font-weight:700;
+  box-shadow:var(--shadow); margin:10px 0 4px;
+}
+.doorWrap{text-align:center; padding-top:8px;}
+.doorArch{
+  background:linear-gradient(180deg,#2A5A8A,var(--navy-dark));
+  border-radius:120px 120px 22px 22px; padding:26px 18px 20px; color:#fff;
+  box-shadow:var(--shadow); border:4px solid var(--gold);
+}
+.miaFace{
+  width:104px;height:104px;margin:0 auto 8px;border-radius:50%;
+  background:var(--gold-soft); display:flex;align-items:center;justify-content:center;
+  font-size:62px; border:3px solid #fff;
+}
+.doorArch h1{color:#fff;}
+.doorArch .sub{color:#DCE8F5;}
+.pinDots{display:flex; gap:12px; justify-content:center; margin:16px 0 6px; min-height:20px;}
+.pinDots span{width:18px;height:18px;border-radius:50%;background:#E7EFEA;border:2px solid var(--navy);}
+.pinDots span.f{background:var(--navy);}
+.pinMsg{min-height:22px; font-size:15px; font-weight:700; color:var(--navy-dark);}
+.pinPad{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:320px; margin:12px auto 0;}
+.pinPad button{
+  min-height:62px; border-radius:18px; background:#fff; color:var(--ink);
+  font-size:26px; font-weight:800; box-shadow:var(--shadow); border:2px solid #EFE3CB;
+}
+.pinPad button:active{background:var(--gold-soft);}
+.pinPad button.fn{font-size:16px; color:var(--muted);}
+.roleRow{display:flex; gap:10px; justify-content:center; margin-top:16px;}
+.roleRow button{
+  min-height:48px; padding:10px 16px; border-radius:999px; background:#fff;
+  border:2px solid var(--lock); font-size:15px; font-weight:700; color:var(--muted);
+}
+.roleRow button.sel{border-color:var(--navy); color:var(--navy-dark); background:#EAF0F7;}
+.hbf{
+  background:linear-gradient(135deg,#2A5A8A,var(--navy-dark));
+  color:#fff; border-radius:22px; padding:16px; box-shadow:var(--shadow);
+  border-bottom:6px solid var(--gold); margin-top:10px;
+}
+.hbf .row{display:flex; align-items:center; gap:12px;}
+.hbf .miaFace{width:74px;height:74px;font-size:44px;margin:0;flex:0 0 auto;}
+.hbf h1{color:#fff; font-size:23px; margin:0;}
+.hbf p{margin:3px 0 0; color:#DCE8F5; font-size:14px; line-height:1.4;}
+.starsBar{
+  display:flex; gap:8px; align-items:center; margin-top:12px; flex-wrap:wrap;
+  background:rgba(255,255,255,.14); border-radius:999px; padding:7px 12px; font-weight:800; font-size:15px;
+}
+.bigBtn{
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  min-height:58px; border-radius:18px; background:var(--navy); color:#fff;
+  font-size:19px; font-weight:800; box-shadow:var(--shadow); margin:14px 0;
+}
+.bigBtn:active{background:var(--navy-dark);}
+.bigBtn.gold{background:var(--gold); color:var(--ink);}
+.ghostBtn{
+  display:inline-flex; align-items:center; gap:6px; min-height:48px; padding:10px 16px;
+  border-radius:999px; background:#fff; border:2px solid #EFE3CB; color:var(--ink);
+  font-size:15px; font-weight:700; box-shadow:var(--shadow);
+}
+.card{
+  background:var(--card); border-radius:20px; box-shadow:var(--shadow);
+  padding:16px; margin:12px 0; border:2px solid #F3E9D2;
+}
+.doorCard{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  background:var(--card); border-radius:20px; box-shadow:var(--shadow);
+  padding:16px; margin:10px 0; border:2px solid #F3E9D2; min-height:78px;
+}
+.doorCard .ic{font-size:34px; flex:0 0 auto;}
+.doorCard .tt{font-size:18px; font-weight:800;}
+.doorCard .ds{font-size:14px; color:var(--muted); margin-top:2px; line-height:1.35;}
+.doorCard .st{margin-left:auto; font-size:22px; flex:0 0 auto;}
+.doorCard.locked{opacity:.75;}
+.doorCard.locked .tt{color:var(--muted);}
+.doorCard.openNow{border-color:var(--navy);}
+.tag{
+  display:inline-block; font-size:12px; font-weight:800; letter-spacing:.4px;
+  background:var(--gold-soft); color:#8A6414; border-radius:999px; padding:3px 9px; margin-bottom:5px;
+}
+.tag.green{background:#EAF0F7; color:var(--navy-dark);}
+.secTitle{font-size:17px; font-weight:800; margin:20px 0 4px;}
+.bubble{
+  background:#fff; border:2px solid var(--gold); border-radius:18px; padding:14px 16px;
+  font-size:16px; line-height:1.5; box-shadow:var(--shadow); margin:10px 0;
+}
+.bubble .who{font-weight:800; color:var(--navy-dark); display:block; margin-bottom:3px; font-size:14px;}
+.storyLine{
+  background:#fff; border-radius:16px; padding:13px 15px; margin:9px 0; box-shadow:var(--shadow);
+  border-left:6px solid var(--gold);
+}
+.storyLine .de{font-size:20px; font-weight:800; line-height:1.35;}
+.storyLine .en{font-size:14px; color:var(--muted); margin-top:2px;}
+.hearBtn{
+  display:inline-flex; align-items:center; gap:7px; min-height:48px; padding:9px 16px;
+  border-radius:999px; background:var(--gold); color:var(--ink); font-size:16px; font-weight:800;
+  box-shadow:var(--shadow); margin:6px 4px 6px 0;
+}
+.hearBtn.small{min-height:44px; font-size:14px; padding:7px 13px;}
+.optGrid{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin:12px 0;}
+.optBtn{
+  min-height:64px; border-radius:16px; background:#fff; border:2px solid #EFE3CB;
+  font-size:18px; font-weight:800; color:var(--ink); box-shadow:var(--shadow); padding:10px;
+}
+.optBtn small{display:block; font-size:13px; color:var(--muted); font-weight:600; margin-top:2px;}
+.optBtn.right{border-color:var(--navy); background:#EAF0F7;}
+.optBtn.wrong{border-color:var(--red); background:#FDECEA;}
+.progressDots{display:flex; gap:6px; justify-content:center; margin:12px 0 2px;}
+.progressDots i{width:11px;height:11px;border-radius:50%;background:#E3E9E4;}
+.progressDots i.done{background:var(--navy);}
+.progressDots i.now{background:var(--gold); transform:scale(1.3);}
+.center{text-align:center;}
+.bigDe{font-size:27px; font-weight:900; line-height:1.3; text-align:center; margin:12px 0 2px;}
+.bigEn{text-align:center; color:var(--muted); font-size:15px; margin-bottom:8px;}
+.frameRow{display:flex; gap:10px; margin:10px 0;}
+.frame{
+  flex:1; aspect-ratio:1; border:3px dashed var(--lock); border-radius:14px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  color:var(--muted); font-size:12px; font-weight:700; background:#fff; padding:6px; text-align:center;
+}
+.frame .fi{font-size:26px;}
+.frame.filled{border-style:solid; border-color:var(--gold); color:var(--ink); background:var(--gold-soft);}
+.wordRow{display:flex; align-items:center; gap:10px; padding:11px 4px; border-bottom:1px solid #F0E7D2;}
+.wordRow:last-child{border-bottom:none;}
+.wordRow .wd{font-size:18px; font-weight:800;}
+.wordRow .wm{font-size:14px; color:var(--muted);}
+.wordRow .hearBtn{margin-left:auto;}
+.pill{font-size:12px; font-weight:800; border-radius:999px; padding:3px 9px; background:var(--gold-soft); color:#8A6414;}
+.pill.owned{background:#EAF0F7; color:var(--navy-dark);}
+.checkItem{display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px solid #F0E7D2; font-size:15px; line-height:1.45;}
+.checkItem:last-child{border-bottom:none;}
+.checkItem .ck{font-size:19px;}
+.footerNote{color:var(--muted); font-size:13px; text-align:center; margin:18px 0 4px; line-height:1.5;}
+</style>
+</head>
+<body>
+
+<!-- ================= PIN DOOR ================= -->
+<section class="screen on" id="scr-pin">
+  <a class="islandBack" href="https://raghuramsuda-sys.github.io/sreshta-languages/">← Languages</a>
+  <div class="doorWrap">
+    <div class="doorArch">
+      <div class="miaFace">👧</div>
+      <h1>Hi, Sreshta!</h1>
+      <p class="sub">Welcome to Mia's American Street.<br>Mia is your American friend. Copy her, and speak like a US native.</p>
+    </div>
+    <div class="roleRow">
+      <button id="roleChild" class="sel" onclick="setRole('child')">I am Sreshta</button>
+      <button id="roleParent" onclick="setRole('parent')">Mom &amp; Dad</button>
+    </div>
+    <div class="pinDots" id="pinDots"><span></span><span></span><span></span><span></span></div>
+    <div class="pinMsg" id="pinMsg">Tap your secret code</div>
+    <div class="pinPad" id="pinPad"></div>
+    <p class="footerNote">SAMPLE — Main Door + World 1 Super R (first 3 missions) + Baseline</p>
+  </div>
+</section>
+
+<!-- ================= MAIN DOOR ================= -->
+<section class="screen" id="scr-home">
+  <a class="islandBack" href="https://raghuramsuda-sys.github.io/sreshta-languages/">← Languages</a>
+  <div class="hbf">
+    <div class="row">
+      <div class="miaFace">👧</div>
+      <div>
+        <h1>Mia's American Street</h1>
+        <p>Your American Accent Main Door. One sound world at a time, all the way to speaking like a US native.</p>
+      </div>
+    </div>
+    <div class="starsBar">⭐ <span id="starCount">0</span> stars &nbsp;·&nbsp; 🔊 <span id="wordCount">0</span> sounds met</div>
+  </div>
+
+  <button class="bigBtn" id="continueBtn" onclick="continuePlay()">▶ Continue</button>
+
+  <div class="secTitle">🚪 Sound Worlds</div>
+  <div id="worldList"></div>
+
+  <div class="secTitle">🎒 My Things</div>
+  <button class="doorCard" onclick="show('sounds')">
+    <span class="ic">🔊</span>
+    <span><span class="tt">My Sounds</span><div class="ds">Every American sound you have met — tap to hear Mia again.</div></span>
+    <span class="st">›</span>
+  </button>
+  <button class="doorCard" onclick="show('voice')">
+    <span class="ic">🎤</span>
+    <span><span class="tt">My Voice</span><div class="ds">Your voice diary — your first American sounds and your best lines.</div></span>
+    <span class="st">›</span>
+  </button>
+  <button class="doorCard" onclick="show('badges')">
+    <span class="ic">🏆</span>
+    <span><span class="tt">Badges Wall</span><div class="ds">One badge for every Sound World you finish.</div></span>
+    <span class="st">›</span>
+  </button>
+  <p class="footerNote">Made with love by Nanna, in the USA — for Sreshta in Bangalore.<br>Your Bangalore voice stays yours. This is a second voice you can switch on.</p>
+</section>
+
+<!-- ================= WORLD 1 ================= -->
+<section class="screen" id="scr-world">
+  <button class="ghostBtn" onclick="show('home')">← Main Door</button>
+  <h1 style="margin-top:12px;">World 1 — Super R ⭐</h1>
+  <p class="sub">The strong American R. Car, star, bird, teacher — words you already know, sounding American.</p>
+  <div id="missionList"></div>
+  <p class="footerNote">Worlds 2 to 8 open one by one in the full build, by finishing the world before them.</p>
+</section>
+
+<!-- ================= PLAY ================= -->
+<section class="screen" id="scr-play">
+  <button class="ghostBtn" onclick="exitPlay()">← World 1</button>
+  <div class="progressDots" id="playDots"></div>
+  <div id="playBody"></div>
+</section>
+
+<!-- ================= MY SOUNDS ================= -->
+<section class="screen" id="scr-sounds">
+  <button class="ghostBtn" onclick="show('home')">← Main Door</button>
+  <h1 style="margin-top:12px;">🔊 My Sounds</h1>
+  <p class="sub">Sounds turn green when you own them — when you finish the mission where you met them.</p>
+  <div class="card" id="soundsList"></div>
+</section>
+
+<!-- ================= MY VOICE ================= -->
+<section class="screen" id="scr-voice">
+  <button class="ghostBtn" onclick="show('home')">← Main Door</button>
+  <h1 style="margin-top:12px;">🎤 My Voice</h1>
+  <div class="card">
+    <p style="margin:4px 0; line-height:1.55;" id="voiceText">Your very first American sounds will live here. Finish the Baseline and your first voice diary entry is saved.</p>
+  </div>
+  <div class="card" id="voiceLines"></div>
+</section>
+
+<!-- ================= BADGES ================= -->
+<section class="screen" id="scr-badges">
+  <button class="ghostBtn" onclick="show('home')">← Main Door</button>
+  <h1 style="margin-top:12px;">🏆 Badges Wall</h1>
+  <p class="sub">Finish a Sound World and its badge fills in.</p>
+  <div class="frameRow" id="badgeRow1"></div>
+  <div class="frameRow" id="badgeRow2"></div>
+</section>
+
+<!-- ================= PARENTS ================= -->
+<section class="screen" id="scr-parents">
+  <a class="islandBack" href="https://raghuramsuda-sys.github.io/sreshta-languages/">← Languages</a>
+  <h1 style="margin-top:10px;">Parents Dashboard — American Accent</h1>
+  <p class="sub">Step 1 of 3: overview. This sample covers World 1 only.</p>
+  <div class="card" id="parentOverview"></div>
+  <div class="card">
+    <div style="font-weight:800; margin-bottom:4px;">🏠 American at Home (this week)</div>
+    <div class="checkItem"><span class="ck">🎵</span><span>Background listening: a US cartoon or audio story once a day. Just listen, no pressure to repeat.</span></div>
+    <div class="checkItem"><span class="ck">👩‍👧</span><span>Amma Play Partner: tap any mission, tap Mia's line, copy it first, then say it to Sreshta. You never need to know the accent in advance.</span></div>
+    <div class="checkItem"><span class="ck">📞</span><span>Nanna US Call: 10 minutes, American voice only. This week's lines: “Hi! I have a red car.” — “The girl sees the bird.”</span></div>
+  </div>
+  <div class="card">
+    <div style="font-weight:800; margin-bottom:4px;">🔊 Sample audio note</div>
+    <p style="margin:4px 0; line-height:1.5;">This sample uses your phone's own US English voice (en-US) for Mia. The full build must pass the audio gate: verified General American clips, slow and normal speed, for every Mia line.</p>
+  </div>
+  <button class="bigBtn gold" onclick="show('home')">Preview Sreshta's Main Door</button>
+  <button class="ghostBtn" onclick="show('pin')">← Back to PIN door</button>
+</section>
+
+<script>
+/* ============ DATA ============ */
+const WORLDS=[
+ {n:1,t:"Super R",d:"Car, star, bird, teacher — the strong American R.",state:"open"},
+ {n:2,t:"Butter Water",d:"Flap T: water sounds like wader, butter, city.",state:"locked",need:"Finish World 1 to open"},
+ {n:3,t:"TH",d:"Think, this, mother, brother — tongue between teeth.",state:"locked",need:"Finish World 2 to open"},
+ {n:4,t:"V, W and Vowels",d:"Very, well, cat, hot — sounds that shift most.",state:"locked",need:"Finish World 3 to open"},
+ {n:5,t:"Music of Sentences",d:"Stress and melody: which word sings loudest.",state:"locked",need:"Finish World 4 to open"},
+ {n:6,t:"Fast Friends",d:"Linking: words flowing together naturally.",state:"locked",need:"Finish World 5 to open"},
+ {n:7,t:"Storyteller",d:"A full story in American voice.",state:"locked",need:"Finish World 6 to open"},
+ {n:8,t:"On Camera",d:"A talking reel and a speech in American voice.",state:"locked",need:"Finish World 7 to open"}
+];
+const BASELINE={
+ title:"Baseline — Your American voice, day one",
+ steps:[
+  {kind:"listen",say:"car",q:"Tap Mia, listen, then tap what you heard.",
+   options:[{t:"car",ok:true},{t:"star",ok:false},{t:"bird",ok:false},{t:"cat",ok:false}]},
+  {kind:"listen",say:"star",q:"Tap Mia, listen, then tap what you heard.",
+   options:[{t:"star",ok:true},{t:"car",ok:false},{t:"bird",ok:false},{t:"dog",ok:false}]},
+  {kind:"speak",line:"Hi! I am Sreshta. I like my star car.",
+   q:"Now your turn. Say it out loud, just like Mia — no marks, this is only for your voice diary."}
+ ]};
+const MISSIONS=[
+ {id:"m1",n:1,title:"My Red Car",words:[["car","Super R at the end"],["star","Super R at the end"]],
+  story:["I have a red car.","Look at the star!","My car is under the star."],
+  listen:{say:"car",q:"Listen — which word did Mia say?",options:[{t:"car",ok:true},{t:"star",ok:false},{t:"bird",ok:false},{t:"cat",ok:false}]},
+  speak:"I have a red car.",
+  mouth:"Growly R! Pull your tongue back, round your lips, and growl like a car engine: rrrr. Now say carrr.",
+  line:"I have a red car under the star."
+ },
+ {id:"m2",n:2,title:"The Bird and the Girl",words:[["bird","Super R in the middle"],["girl","Super R at the end"]],
+  story:["The bird is my friend.","The girl sees the bird.","Bird, bird, sing for me!"],
+  listen:{say:"bird",q:"Listen — which word did Mia say?",options:[{t:"bird",ok:true},{t:"girl",ok:false},{t:"car",ok:false},{t:"dog",ok:false}]},
+  speak:"The girl sees the bird.",
+  mouth:"R in the middle! Hold the R a little longer: birrrd. Your tongue stays back, it does not tap the roof.",
+  line:"The girl sees the bird."
+ },
+ {id:"m3",n:3,title:"My Teacher",words:[["teacher","Super R at the end"],["sister","Super R at the end"],["her","Super R at the end"]],
+  story:["My teacher is kind.","Her sister is my friend.","My teacher and her sister love stars."],
+  listen:{say:"teacher",q:"Listen — which word did Mia say?",options:[{t:"teacher",ok:true},{t:"sister",ok:false},{t:"bird",ok:false},{t:"star",ok:false}]},
+  speak:"My teacher is kind.",
+  mouth:"Soft R at the end! Do not drop it, do not roll it hard. Just let it sing: teacherrr.",
+  line:"My teacher is kind, and her sister loves stars."
+ }
+];
+
+/* ============ STATE ============ */
+const KEY="sreshtaAmericanSampleV1";
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))||null;}catch(e){S=null;}
+if(!S||typeof S!=="object")S={baseline:false,done:{},words:{},voice:false};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function totalStars(){let t=0;for(const k in S.done)t+=S.done[k];return t;}
+function wordsMet(){return Object.keys(S.words).length;}
+
+/* ============ AUDIO: phone en-US voice for SAMPLE; full build uses verified clips ============ */
+function speak(text,rate){
+  try{
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang="en-US"; u.rate=rate||0.9;
+    const vs=speechSynthesis.getVoices();
+    const v=vs.find(function(x){return x.lang&&x.lang.toLowerCase().indexOf("en-us")===0;})||vs.find(function(x){return x.lang&&x.lang.toLowerCase().indexOf("en")===0;});
+    if(v)u.voice=v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+if("speechSynthesis" in window){try{speechSynthesis.getVoices();}catch(e){}}
+
+/* ============ NAV: every screen has a way back; no dead ends ============ */
+function show(name){
+  document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("on");});
+  document.getElementById("scr-"+name).classList.add("on");
+  window.scrollTo(0,0);
+  if(name==="home")renderHome();
+  if(name==="world")renderWorld();
+  if(name==="sounds")renderSounds();
+  if(name==="voice")renderVoice();
+  if(name==="badges")renderBadges();
+  if(name==="parents")renderParents();
+}
+
+/* ============ PIN ============ */
+let role="child", pinBuf="";
+const pad=document.getElementById("pinPad");
+["1","2","3","4","5","6","7","8","9","","0","⌫"].forEach(function(k){
+  const b=document.createElement("button");
+  b.textContent=k; if(k==="⌫"||k==="")b.className="fn";
+  b.onclick=function(){pinKey(k);}; pad.appendChild(b);
+});
+function setRole(r){
+  role=r; pinBuf=""; drawPin("");
+  document.getElementById("roleChild").classList.toggle("sel",r==="child");
+  document.getElementById("roleParent").classList.toggle("sel",r==="parent");
+}
+function drawPin(msg){
+  const d=document.querySelectorAll("#pinDots span");
+  d.forEach(function(s,i){s.classList.toggle("f",i<pinBuf.length);});
+  if(msg!==undefined&&msg!=="")document.getElementById("pinMsg").textContent=msg;
+}
+function pinKey(k){
+  if(k==="⌫"){pinBuf=pinBuf.slice(0,-1); drawPin("Tap your secret code"); return;}
+  if(k===""||pinBuf.length>=4)return;
+  pinBuf+=k; drawPin("");
+  if(pinBuf.length===4){
+    const want=role==="child"?"2017":"2208";
+    if(pinBuf===want){
+      drawPin(role==="child"?"Welcome, Sreshta! 🌟":"Welcome! 🌟");
+      const target=role==="child"?"home":"parents";
+      setTimeout(function(){pinBuf=""; drawPin("Tap your secret code"); show(target);},450);
+    }else{
+      drawPin("Hmm, that code is not right. Try again.");
+      setTimeout(function(){pinBuf=""; drawPin("Tap your secret code");},700);
+    }
+  }
+}
+
+/* ============ HOME / WORLD ============ */
+function renderHome(){
+  document.getElementById("starCount").textContent=totalStars();
+  document.getElementById("wordCount").textContent=wordsMet();
+  const cb=document.getElementById("continueBtn");
+  if(!S.baseline)cb.textContent="▶ Start — Baseline with Mia";
+  else{
+    const next=MISSIONS.find(function(m){return !S.done[m.id];});
+    cb.textContent=next?("▶ Continue — Mission "+next.n+" · "+next.title):"▶ Replay World 1 missions";
+  }
+  const list=document.getElementById("worldList"); list.innerHTML="";
+  WORLDS.forEach(function(w){
+    const b=document.createElement("button");
+    const open=w.state==="open";
+    b.className="doorCard"+(open?" openNow":" locked");
+    b.innerHTML='<span class="ic">'+(open?"⭐":"🔒")+'</span><span><span class="tag '+(open?"green":"")+'">WORLD '+w.n+'</span><br><span class="tt">'+w.t+'</span><div class="ds">'+w.d+(open?"":" · "+w.need)+'</div></span><span class="st">'+(open?"›":"")+'</span>';
+    if(open)b.onclick=function(){show("world");};
+    list.appendChild(b);
+  });
+}
+function continuePlay(){
+  if(!S.baseline){show("world"); startBaseline(); return;}
+  const next=MISSIONS.find(function(m){return !S.done[m.id];});
+  show("world");
+  if(next)startMission(next.id); else startMission("m1");
+}
+function renderWorld(){
+  const list=document.getElementById("missionList"); list.innerHTML="";
+  const bb=document.createElement("button");
+  bb.className="doorCard"+(S.baseline?"":" openNow");
+  bb.innerHTML='<span class="ic">🌱</span><span><span class="tag green">FIRST</span><br><span class="tt">Baseline — Your American voice, day one</span><div class="ds">No marks. Just listen and try.</div></span><span class="st">'+(S.baseline?"✅":"›")+'</span>';
+  bb.onclick=startBaseline; list.appendChild(bb);
+  MISSIONS.forEach(function(m){
+    const done=!!S.done[m.id];
+    const locked=!S.baseline;
+    const b=document.createElement("button");
+    b.className="doorCard"+(locked?" locked":" openNow");
+    b.innerHTML='<span class="ic">'+(done?"✅":"🎧")+'</span><span><span class="tag">MISSION '+m.n+'</span><br><span class="tt">'+m.title+'</span><div class="ds">'+m.words.map(function(w){return w[0];}).join(" · ")+(done?" · ⭐⭐⭐ earned":"")+(locked?" · Finish the Baseline first":"")+'</div></span><span class="st">'+(locked?"🔒":"›")+'</span>';
+    if(!locked)b.onclick=function(){startMission(m.id);};
+    list.appendChild(b);
+  });
+  [4,5].forEach(function(n){
+    const b=document.createElement("button");
+    b.className="doorCard locked";
+    b.innerHTML='<span class="ic">🔒</span><span><span class="tag">MISSION '+n+'</span><br><span class="tt">Coming in the full build</span><div class="ds">This is the sample — Missions 1 to 3 are playable.</div></span>';
+    list.appendChild(b);
+  });
+}
+
+/* ============ PLAY ENGINE: Listen, Echo, Mouth, Story, Record ============ */
+let play=null, rec=null, recChunks=[], recUrl=null;
+function dots(n,now){
+  const d=document.getElementById("playDots"); d.innerHTML="";
+  for(let i=0;i<n;i++){const el=document.createElement("i"); if(i<now)el.className="done"; if(i===now)el.className="now"; d.appendChild(el);}
+}
+function bubble(html){return '<div class="bubble"><span class="who">👧 Mia says</span>'+html+'</div>';}
+function esc(s){return s.replace(/'/g,"\\'");}
+function startBaseline(){play={type:"baseline",step:0,answered:false}; show("play"); renderPlay();}
+function startMission(id){
+  const m=MISSIONS.find(function(x){return x.id===id;});
+  play={type:"mission",m:m,step:0,answered:false}; show("play"); renderPlay();
+}
+function exitPlay(){stopRec(); play=null; show("world");}
+function nextStep(){stopRec(); play.step++; play.answered=false; renderPlay();}
+function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); const t=a[i];a[i]=a[j];a[j]=t;} return a;}
+function renderPlay(){
+  const body=document.getElementById("playBody");
+  const total=play.type==="baseline"?BASELINE.steps.length+1:5;
+  dots(total,Math.min(play.step,total-1));
+  if(play.type==="baseline")return renderBaseline(body);
+  const m=play.m;
+  if(play.step===0){
+    const L=m.listen;
+    body.innerHTML=bubble("Step 1 — Listen Game. Ear first! Tap Mia, listen, then tap what you heard. Only one answer sounds like Mia.")+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(L.say)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(L.say)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="optGrid">'+shuffle(L.options.map(function(o,i){return {o:o,i:i};})).map(function(x){return '<button class="optBtn" id="opt'+x.i+'" onclick="answerListen('+x.i+')">'+x.o.t+'</button>';}).join("")+'</div><div id="listenMsg"></div>';
+  } else if(play.step===1){
+    body.innerHTML=bubble("Step 2 — Echo Game. Mia says it, you say it straight back, like a parrot. Slow first, then normal.")+
+      '<div class="bigDe">'+m.speak+'</div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<button class="bigBtn gold" onclick="nextStep()">🎤 I echoed it!</button>';
+  } else if(play.step===2){
+    body.innerHTML=bubble("Step 3 — Mouth Play. Make the silly face, then the sound, then the word.")+
+      '<div class="card" style="font-size:17px; line-height:1.55;">'+m.mouth+'</div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.speak)+'\',0.75)">🔊 Hear it again</button></div>'+
+      '<button class="bigBtn" onclick="nextStep()">😜 I did the mouth play!</button>';
+  } else if(play.step===3){
+    body.innerHTML=bubble("Step 4 — Story Line. Say a real line, like you are telling the story yourself.")+
+      m.story.map(function(l){return '<div class="storyLine"><div class="de">'+l+'</div></div>';}).join("")+
+      '<div class="bigDe">'+m.line+'</div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(m.line)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(m.line)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<button class="bigBtn gold" onclick="nextStep()">🎤 I said my story line!</button>';
+  } else {
+    const first=!S.done[m.id];
+    if(first){S.done[m.id]=3; m.words.forEach(function(w){S.words[w[0]]="owned";}); save();}
+    body.innerHTML='<div class="center" style="font-size:64px;">🎉</div>'+
+      bubble("Step 5 — Record and Shine! Record your story line once, listen back if you want, and shine.")+
+      '<div class="center"><button class="hearBtn" id="recBtn" onclick="toggleRec()">🎤 Record my line</button><span id="recState"></span></div>'+
+      '<div class="center" id="recPlay"></div>'+
+      '<p class="sub" style="text-align:center;">'+(first?"⭐⭐⭐ Three stars — counted once, saved forever.":"You replayed it — stars stay as they are, practice makes you American!")+'</p>'+
+      '<button class="bigBtn" onclick="exitPlay()">Back to World 1</button>'+
+      '<button class="ghostBtn" onclick="show(\'home\')">Main Door</button>';
+  }
+}
+function answerListen(i){
+  if(play.answered)return;
+  const L=play.m.listen, o=L.options[i];
+  const btn=document.getElementById("opt"+i);
+  if(o.ok){
+    play.answered=true; btn.classList.add("right");
+    document.getElementById("listenMsg").innerHTML=bubble("Exactly right! Your ears are growing. 🎉")+'<button class="bigBtn" onclick="nextStep()">Next → Echo</button>';
+  }else{
+    btn.classList.add("wrong");
+    document.getElementById("listenMsg").innerHTML=bubble("Not that one — listen once more, you can do it. 💪");
+    speak(L.say,0.75);
+  }
+}
+function renderBaseline(body){
+  const st=BASELINE.steps[play.step];
+  if(!st){
+    if(!S.baseline){S.baseline=true; S.voice=true; save();}
+    body.innerHTML='<div class="center" style="font-size:64px;">🌱</div>'+
+      bubble("Done! Your first American sounds are saved in My Voice. Now Mission 1 is open — let us really begin!")+
+      '<button class="bigBtn" onclick="exitPlay()">Go to World 1</button>'+
+      '<button class="ghostBtn" onclick="show(\'home\')">Main Door</button>';
+    return;
+  }
+  if(st.kind==="listen"){
+    body.innerHTML=bubble(st.q)+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.say)+'\',0.75)">🔊 Mia, slow</button><button class="hearBtn" onclick="speak(\''+esc(st.say)+'\',1)">🔊 Mia, normal</button></div>'+
+      '<div class="optGrid">'+shuffle(st.options.map(function(o,i){return {o:o,i:i};})).map(function(x){return '<button class="optBtn" id="bopt'+x.i+'" onclick="answerBaseline('+x.i+')">'+x.o.t+'</button>';}).join("")+'</div><div id="bMsg"></div>';
+  }else{
+    body.innerHTML=bubble(st.q)+
+      '<div class="bigDe">'+st.line+'</div>'+
+      '<div class="center"><button class="hearBtn" onclick="speak(\''+esc(st.line)+'\',0.75)">🔊 Mia, slow</button></div>'+
+      '<button class="bigBtn gold" onclick="play.step++; renderPlay();">🎤 I tried it!</button>';
+  }
+}
+function answerBaseline(i){
+  const st=BASELINE.steps[play.step], o=st.options[i];
+  const btn=document.getElementById("bopt"+i);
+  if(o.ok){btn.classList.add("right"); document.getElementById("bMsg").innerHTML=bubble("You heard it! That is how American ears grow. 🌱")+'<button class="bigBtn" onclick="play.step++; renderPlay();">Next</button>';}
+  else{btn.classList.add("wrong"); document.getElementById("bMsg").innerHTML=bubble("Good try — listen again."); speak(st.say,0.75);}
+}
+
+/* ============ RECORD (in-session playback; progress saved, audio not claimed as permanent) ============ */
+async function toggleRec(){
+  const btn=document.getElementById("recBtn"), state=document.getElementById("recState");
+  if(rec&&rec.state==="recording"){rec.stop(); return;}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    state.textContent=" Recording is not available on this device — saying it out loud still counts. You already shined! 🌟";
+    return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recChunks=[];
+    rec=new MediaRecorder(stream);
+    rec.ondataavailable=function(e){if(e.data.size)recChunks.push(e.data);};
+    rec.onstop=function(){
+      const blob=new Blob(recChunks,{type:"audio/webm"});
+      if(recUrl)URL.revokeObjectURL(recUrl);
+      recUrl=URL.createObjectURL(blob);
+      document.getElementById("recPlay").innerHTML='<audio controls src="'+recUrl+'" style="width:100%; margin-top:10px;"></audio><p class="sub">Listen back — that is YOUR American voice!</p>';
+      btn.textContent="🎤 Record again";
+      state.textContent=" Saved for this session.";
+      stream.getTracks().forEach(function(t){t.stop();});
+    };
+    rec.start(); btn.textContent="⏹ Stop recording"; state.textContent=" Listening… say your line!";
+  }catch(e){
+    state.textContent=" Microphone was not allowed — saying it out loud still counts. You already shined! 🌟";
+  }
+}
+function stopRec(){try{if(rec&&rec.state==="recording")rec.stop();}catch(e){} rec=null;}
+
+/* ============ MY SOUNDS / VOICE / BADGES / PARENTS ============ */
+function renderSounds(){
+  const el=document.getElementById("soundsList");
+  const all={};
+  MISSIONS.forEach(function(m){m.words.forEach(function(w){all[w[0]]=w[1];});});
+  const met=Object.keys(all).filter(function(w){return S.words[w];});
+  if(!met.length){el.innerHTML="<p style='margin:4px 0;'>No sounds yet — finish Mission 1 and your first American sounds will appear here.</p>"; return;}
+  el.innerHTML=met.map(function(w){return '<div class="wordRow"><span><span class="wd">'+w+'</span><br><span class="wm">'+all[w]+'</span></span><span class="pill owned">OWNED</span><button class="hearBtn small" onclick="speak(\''+esc(w)+'\',0.9)">🔊</button></div>';}).join("");
+}
+function renderVoice(){
+  if(S.voice)document.getElementById("voiceText").textContent="⭐ Saved: your Baseline first sounds and every mission story line you finish. Parents can compare First vs Latest here in the full build.";
+  const el=document.getElementById("voiceLines");
+  const lines=[];
+  if(S.baseline)lines.push("🌱 Baseline: Hi! I am Sreshta. I like my star car.");
+  MISSIONS.forEach(function(m){if(S.done[m.id])lines.push("⭐ Mission "+m.n+" — "+m.title+": "+m.line);});
+  el.innerHTML=lines.length?lines.map(function(l){return '<p style="margin:8px 0; line-height:1.5;">'+l+'</p>';}).join(""):"<p style='margin:4px 0;'>No voice diary yet — finish the Baseline to start it.</p>";
+}
+function renderBadges(){
+  const doneN=Object.keys(S.done).length;
+  const w1done=doneN>=3;
+  document.getElementById("badgeRow1").innerHTML=
+    '<div class="frame'+(w1done?" filled":"")+'"><span class="fi">⭐</span>World 1<br>Super R'+(w1done?"<br>✅ Earned":"")+'</div>'+
+    '<div class="frame"><span class="fi">🔒</span>World 2<br>Butter Water</div>'+
+    '<div class="frame"><span class="fi">🔒</span>World 3<br>TH</div>';
+  document.getElementById("badgeRow2").innerHTML=
+    '<div class="frame"><span class="fi">🔒</span>World 4<br>V, W, Vowels</div>'+
+    '<div class="frame"><span class="fi">🔒</span>World 5<br>Music</div>'+
+    '<div class="frame"><span class="fi">🔒</span>Worlds 6–8<br>Coming later</div>';
+}
+function renderParents(){
+  const doneN=Object.keys(S.done).length;
+  document.getElementById("parentOverview").innerHTML=
+    '<div style="font-weight:800; margin-bottom:6px;">📊 Overview — World 1 Super R (sample)</div>'+
+    '<p style="margin:4px 0;">Baseline: <b>'+(S.baseline?"Done ✅":"Not yet")+'</b></p>'+
+    '<p style="margin:4px 0;">Missions finished: <b>'+doneN+' of 3</b> (sample) · Stars: <b>'+totalStars()+'</b></p>'+
+    '<p style="margin:4px 0;">Sounds met &amp; owned: <b>'+wordsMet()+'</b></p>'+
+    '<p style="margin:4px 0;">Next step: <b>'+(doneN>=3?"Sample complete — full build comes next (Worlds 1–8, 40 missions).":"Continue World 1 with Amma, about 10 minutes, speaking out loud.")+'</b></p>';
+}
+renderHome();
+</script>
+</body>
+</html>
